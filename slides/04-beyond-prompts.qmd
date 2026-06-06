@@ -54,7 +54,7 @@ format:
 
 ## Demo
 
-The manual tool-calling loop: see every request, tool call, and result
+Human-in-the-loop: the model writes its tool request as text, and a person runs it and reports back
 
 ```r
 # demo/04-manual-tools/04-manual-tools-app.R
