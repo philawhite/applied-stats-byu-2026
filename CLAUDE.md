@@ -2,20 +2,23 @@
 
 Workshop materials for the **50th Summer Institute of Applied Statistics (SIAS)** at Brigham Young University, 17-18 June 2026, taught by Julia Silge. Title: *Programming with LLMs for Data Practitioners*. Two days:
 
-- Day 1, "Build on AI": programming with LLMs from R (`ellmer`) and Python (`chatlas`); prompts, structured output, tool calling, RAG, Shiny chat.
+- Day 1, "Build on AI": programming with LLMs from R (`ellmer`) and Python (`chatlas`). Four sessions: (1) Talking with LLMs, (2) Programming with LLMs, (3) Prompt engineering and RAG, (4) Beyond prompts (tool calling, MCP, an agents teaser, querychat as a bonus).
 - Day 2, "Build with AI": using AI coding assistants (inline completions, chat, agentic). Currently mostly TODO placeholders.
 
 ## Layout
 
 - `index.qmd`: landing page with welcome, learning objectives, local-setup prep, and a per-day schedule table.
 - `slides/`: eight numbered reveal.js decks (`01-talking-with-llms.qmd` ... `08-agentic-workflows.qmd`) plus `custom.scss` and `title-slide.html` (custom partial).
-- `code/`: flat `NN-name.R` / `NN-name.py` exercise skeletons (18 exercises, R + Python pairs).
+- `code/`: flat `NN-name.R` / `NN-name.py` exercise skeletons (17 exercises, R + Python pairs), plus companion Shiny apps (`08-batch-app`, `11-quiz-game-app`) and `11-quiz-game-prompt.md`. Header comments are `# NN-name.ext` then `# Deck NN: <deck title> (<section>)`.
+- `demo/`: instructor-run demo apps and docs, one folder per demo, prefixed by the deck number it supports (`01-clearbot`, `01-token-possibilities`, `02-models`, `04-manual-tools`, `04-weather-tool`). Slides point at these via `## Demo` callouts.
+- `data/`: shared data for exercises. `recipes/` (`images/`, `pdf/`, `text/`) feeds the multi-modal, structured-output, and batch exercises; `mtcars.csv` feeds the plot-interpretation exercises.
 - `images/`: 8 unDraw SVG illustrations, one per deck. Mapping is fixed; see deck YAML `data-background-image`.
 - `_extensions/`: `gadenbuie/countdown` (timer shortcode) and `quarto-ext/fontawesome`.
 - `_quarto.yml`: website config; theme is `[zephyr, footer.scss]`. Output dir is `docs/`.
 - `footer.scss`: site SCSS. Disables zephyr's Google Fonts import via `$web-font-path: false`, plus footer layout and table-width rules.
 - `init-env.sh`: local setup helper for R (renv) + Python (uv). No Codespaces.
 - `requirements.txt`: Python packages (`chatlas`, `shiny`, plus deps).
+- `DESCRIPTION`: R dependency manifest (`Type: Workshop`). Licensing: course content (slides, prose) is CC BY-NC-SA 4.0 (root `LICENSE.md`, matching the site footer and `DESCRIPTION`); the demos are MIT (built on Garrick Aden-Buie's work), each `demo/*` carries its own MIT `LICENSE`.
 - Renamed `footer.scss` from `footer.css` because it contains SCSS (`$var` syntax). Do not rename back, the CSS linter will complain.
 
 ## Slide deck conventions
@@ -59,6 +62,12 @@ Every place participants do hands-on work uses:
 
 The `{{< countdown >}}` shortcode comes from the `gadenbuie/countdown` extension in `_extensions/`.
 
+### Demos
+
+Some sections use an instructor-run demo instead of (or alongside) a participant activity. On the slide this is a `## Demo` (or `## Demos`) heading inside a `::: {.callout-note icon=false}` block, with a code block or path pointing at the matching folder under `demo/`. Demo folders are prefixed by the deck number they support.
+
+This is an **Anthropic-only** workshop for participants: exercises and demos use Claude (`ellmer` / `chatlas`), participants set `ANTHROPIC_API_KEY`, and code targets current Claude model ids (e.g. `claude-opus-4-8`, `claude-sonnet-4-6`, `claude-haiku-4-5`). Two instructor-run exceptions, both run on the instructor's own keys: `demo/01-token-possibilities` is on OpenAI because it visualizes token log-probabilities (`logprobs`), which Anthropic's API does not expose; `demo/02-models` compares several providers (OpenAI, Google, etc.).
+
 ### Per-deck illustration mapping
 
 | Deck | Illustration | `data-background-size` |
@@ -85,13 +94,13 @@ The index hero is `undraw_vibe-coding_mjme.svg` (shared with deck 06).
 
 ## Available skills
 
-- `.claude/skills/workshop-time-estimate/SKILL.md`: estimates total workshop time by summing countdowns and counting non-exercise slides, then comparing against the schedule table in `index.qmd`. Trigger by asking about time budget or whether there's enough content.
+- `.claude/skills/workshop-time-estimate/SKILL.md`: estimates total workshop time by summing countdowns, counting non-exercise slides (1-2 min each), and counting demo slides (`## Demo`) at 5-8 min each, then comparing against the schedule table in `index.qmd`. Trigger by asking about time budget or whether there's enough content.
 
 ## Operating notes
 
 - `quarto preview` is typically started by Julia in a separate terminal, not by Claude. Wiping `docs/` and `.quarto/` is the right move when stale builds cause weirdness (e.g., old font imports lingering after SCSS changes).
 - Local-only workflow: there is no `.devcontainer/` and no Codespaces wiring on purpose.
-- The repo is not git-initialized yet. Holding off on commits until Julia is ready.
+- The repo is git-initialized. Julia makes her own commits and PRs; never commit or push on her behalf, stage or prepare changes and stop there.
 
 ## Per-user preferences
 
