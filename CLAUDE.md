@@ -66,7 +66,13 @@ The `{{< countdown >}}` shortcode comes from the `gadenbuie/countdown` extension
 
 Some sections use an instructor-run demo instead of (or alongside) a participant activity. On the slide this is a `## Demo` (or `## Demos`) heading inside a `::: {.callout-note icon=false}` block, with a code block or path pointing at the matching folder under `demo/`. Demo folders are prefixed by the deck number they support.
 
-This is an **Anthropic-only** workshop for participants: exercises and demos use Claude (`ellmer` / `chatlas`), participants set `ANTHROPIC_API_KEY`, and code targets current Claude model ids (e.g. `claude-opus-4-8`, `claude-sonnet-4-6`, `claude-haiku-4-5`). Two instructor-run exceptions, both run on the instructor's own keys: `demo/01-token-possibilities` is on OpenAI because it visualizes token log-probabilities (`logprobs`), which Anthropic's API does not expose; `demo/02-models` compares several providers (OpenAI, Google, etc.).
+This is an **Anthropic-only** workshop for participants: exercises and demos use Claude (`ellmer` / `chatlas`), participants set `ANTHROPIC_API_KEY`, and code targets current Claude model ids (e.g. `claude-opus-4-8`, `claude-sonnet-4-6`, `claude-haiku-4-5`). Three instructor-run demos use OpenAI on the instructor's own keys, because they need a capability Anthropic lacks or compare providers:
+
+- `demo/01-token-possibilities` visualizes token log-probabilities (`logprobs`), which Anthropic's API does not expose.
+- `demo/03-rag` uses OpenAI **embeddings** (`embed_openai`) for retrieval, since Anthropic has no embeddings API; the chat model is still Claude.
+- `demo/02-models` deliberately compares several providers (Anthropic, OpenAI, Google).
+
+The two tool-calling demos (`demo/04-manual-tools`, `demo/04-weather-tool`) run on Claude: tool calling needs no OpenAI-specific feature, and tools should be shown on the provider participants use.
 
 ### Per-deck illustration mapping
 
