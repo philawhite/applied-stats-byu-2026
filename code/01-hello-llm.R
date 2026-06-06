@@ -5,7 +5,6 @@
 # %% Import package
 library(ellmer)
 
-
 # %% Verify API access by writing a short poem about SIAS 2026
 chat <- chat_anthropic()
 chat$chat(

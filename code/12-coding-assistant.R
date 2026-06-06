@@ -20,9 +20,11 @@ library(ellmer)
 chat <- chat(
   "anthropic/claude-3-5-sonnet-20241022",
   echo = "output",
-  system_prompt = brio::read_file(here::here(
-    "_solutions/15_coding-assistant/docs.R.md"
-  ))
+  system_prompt = brio::read_file(
+    here::here(
+      "_solutions/15_coding-assistant/docs.R.md"
+    )
+  )
 )
 
 chat$chat(

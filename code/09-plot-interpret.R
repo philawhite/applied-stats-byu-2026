@@ -22,4 +22,4 @@ ggplot(mtcars) +
 
 # %% Send the plot to the model and ask for an interpretation
 chat <- chat_anthropic()
-chat$chat("Interpret this plot.", content_image_plot())
+chat$chat("Interpret this plot of mtcars.", content_image_plot())

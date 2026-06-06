@@ -5,8 +5,7 @@ library(jsonlite)
 
 recipes <-
   here::here("data/recipes/recipes.json") |>
-  fromJSON(simplifyVector = TRUE, simplifyDataFrame = FALSE)
-
+    fromJSON(simplifyVector = TRUE, simplifyDataFrame = FALSE)
 
 ui_ingredients <- function(ingredients) {
   items <- purrr::map(ingredients, function(ingredient) {
@@ -100,7 +99,7 @@ ui <- page_sidebar(
 server <- function(input, output, session) {
   output$ui_recipe_card <- renderUI({
     req(input$recipes)
-    r <- keep(recipes, ~ .x$title == input$recipes)[[1]]
+    r <- keep(recipes, ~.x$title == input$recipes)[[1]]
     ui_recipe(r)
   })
 }

@@ -5,7 +5,6 @@
 # giving a "decent" interpretation of pure noise.
 
 # %% Import packages and generate data
-library(readr)
 library(ellmer)
 library(ggplot2)
 m <- 32
@@ -16,7 +15,6 @@ eps <- 1 / (2 * sqrt(m))
 jitter <- matrix(runif(length(grid), -eps, eps), ncol = 2)
 grid_jitter <- pmin(pmax(grid + jitter, 0), 1)
 mtcars <- as.data.frame(grid_jitter)
-
 # %% Make a plot
 ggplot(mtcars) +
   aes(x = x, y = y) +
