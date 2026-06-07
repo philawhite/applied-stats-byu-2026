@@ -3,28 +3,31 @@
 Workshop materials for the **50th Summer Institute of Applied Statistics (SIAS)** at Brigham Young University, 17-18 June 2026, taught by Julia Silge. Title: *Programming with LLMs for Data Practitioners*. Two days:
 
 - Day 1, "Build on AI": programming with LLMs from R (`ellmer`) and Python (`chatlas`). Four sessions: (1) Talking with LLMs, (2) Programming with LLMs, (3) Prompt engineering and RAG, (4) Beyond prompts (tool calling, MCP, an agents teaser, querychat as a bonus).
-- Day 2, "Build with AI": using AI coding assistants (inline completions, chat, agentic). Currently mostly TODO placeholders.
+- Day 2, "Build with AI": using AI coding assistants, centered on **Posit Assistant**. Four sessions: (5) Intro to AI coding assistants, (6) Working in your editor, (7) Steering and extending, (8) Agentic workflows. Built around one running dataset (Utah crashes), climbing from web chat to in-editor help to autonomous agents.
 
 ## Status and next steps
 
 **Day 1 (decks 01-04) is built out** and Anthropic-only for participants: slides, exercises, and demos are in place (the OpenAI / multi-provider exceptions are the three demos listed under Demos below).
 
-**Day 2 (decks 05-08) is the next work, start here.** The decks exist as slide skeletons (section headings, but no `## Your turn` activities or demos yet) and need building out. Day 2 is "Build with AI": AI coding assistants (Positron Assistant, inline completions, chat, agentic workflows), where MCP and agents (previewed on Day 1) get their full treatment. There are no Day-2 exercises in `code/` or demos in `demo/` yet.
+**Day 2 (decks 05-08) is built out**, centered on **Posit Assistant** (a data-science assistant for Positron, RStudio, and a terminal TUI; Claude under the hood by default). All four decks have slides, `## Your turn` activities, and `## Demo` callouts. Day 2 uses a single running example, the Utah crash dataset (`data/utah-crash-data-2020.parquet`), and climbs from web chat to in-editor help (completions, chat, explore, debug) to steering an agent (plan mode, memory/`AGENTS.md`, skills, MCP) to autonomous workflows (the terminal agent, the `/restricted`-to-`/yolo` autonomy dial, guardrails, reproducible `/report`). MCP and agents, previewed on Day 1, get their full treatment here. The terminal `pa` agent in deck 08 is instructor-demo-only.
 
 Open items:
 
 - `code/15-querychat.{R,py}` is the only remaining Day-1 placeholder (still `TODO`), waiting on a dataset; when it is filled, add `querychat` to `requirements.txt`.
-- MCP is a Day-1 preview only; the `17-mcp` exercise was removed. Build the real MCP material into Day 2.
-- The agentic "databot" demo was removed, to be rebuilt for Day 2 (deck 08).
+- MCP got its full Day-2 treatment in deck 07: a tiny repo-local server (`mcp/crash-server.py`, run via `uv run <raw GitHub URL>`) wired into Posit Assistant via `.positai/settings.json`. Action: push `mcp/crash-server.py` to `main` so the raw URL in the config resolves.
+- Deck 08's agentic story is the terminal `pa` agent (instructor demo) plus an in-editor "build a crash report" capstone, not the old "databot" demo (which stays removed). Deck 08's feedback-survey link is a `TODO` placeholder.
 - Verification gap: the Shiny apps and `.qmd` demos are checked by parse/compile and API introspection, not a live run. Do a local smoke test (`shiny run` / `runApp` / run the `.qmd` chunks) before the workshop. `faicons` and `playsound3` are listed in `requirements.txt` but were not installed in this dev env.
+- Day-2 verification: the MCP server is verified (reproject correct; boots and advertises its tools via a real MCP-client handshake), but Posit Assistant's own MCP wiring and the deck-08 `pa` CLI demo need a live check. `code/16-debug-crashes.R` is unrun in this dev env (R `tidyverse`/`nanoparquet` not installed); the Python version is verified.
 
 ## Layout
 
 - `index.qmd`: landing page with welcome, learning objectives, local-setup prep, and a per-day schedule table.
 - `slides/`: eight numbered reveal.js decks (`01-talking-with-llms.qmd` ... `08-agentic-workflows.qmd`) plus `custom.scss` and `title-slide.html` (custom partial).
-- `code/`: flat `NN-name.R` / `NN-name.py` Day-1 exercise skeletons (R + Python pairs), numbered `01`-`15`, gapless. (RAG became `demo/03-rag` and the MCP exercise was dropped, so the deck-04 exercises were renumbered to close the gaps; MCP is a Day-1 preview only.) Plus companion Shiny apps (`08-batch-app`, `11-quiz-game-app`), the quiz prompt (`11-quiz-game-prompt.md`), and coding-assistant context docs (`12-coding-assistant-docs-{py,rstats}.md`). Header comments are `# NN-name.ext` then `# Deck NN: <deck title> (<section>)`.
+- `code/`: flat `NN-name.R` / `NN-name.py` exercise skeletons (R + Python pairs), Day-1 are `01`-`15` gapless. (RAG became `demo/03-rag` and the MCP exercise was dropped, so the deck-04 exercises were renumbered to close the gaps.) Plus companion Shiny apps (`08-batch-app`, `11-quiz-game-app`), the quiz prompt (`11-quiz-game-prompt.md`), and coding-assistant context docs (`12-coding-assistant-docs-{py,rstats}.md`). Day-2 adds `16-debug-crashes.{R,py}` (a planted-bug crash script for the deck-06 debug exercise); Day-2 work is mostly driving Posit Assistant, not filling skeletons, so there are few new `code/` files. Header comments are `# NN-name.ext` then `# Deck NN: <deck title> (<section>)`.
 - `demo/`: instructor-run demo apps and docs, one folder per demo, prefixed by the deck number it supports (`01-clearbot`, `01-token-possibilities`, `02-models`, `03-rag`, `04-manual-tools`, `04-weather-tool`). Slides point at these via `## Demo` callouts.
-- `data/`: shared data for exercises. `recipes/` (`images/`, `pdf/`, `text/`) feeds the multi-modal, structured-output, and batch exercises; `mtcars.csv` feeds the plot-interpretation exercises.
+- `data/`: shared data for exercises. `recipes/` (`images/`, `pdf/`, `text/`) feeds the multi-modal, structured-output, and batch exercises; `mtcars.csv` feeds the plot-interpretation exercises. `utah-crash-data-2020.parquet` (Utah Open Data, ~250k crashes, 2016-2019) is the single running dataset for all of Day 2.
+- `mcp/`: a small local MCP server for Day 2 (`crash-server.py`: `crash_codebook` + `reproject` tools) plus `README.md`. Run via `uv run` (PEP 723 inline deps `mcp` + `pyproj`; no virtualenv). Used in deck 07.
+- `.positai/settings.json`: project config for Posit Assistant; registers the `utah-crash` MCP server, pointing `uv run` at the server's raw GitHub URL (so it is path/cwd independent).
 - `images/`: 8 unDraw SVG illustrations, one per deck. Mapping is fixed; see deck YAML `data-background-image`.
 - `_extensions/`: `gadenbuie/countdown` (timer shortcode) and `quarto-ext/fontawesome`.
 - `_quarto.yml`: website config; theme is `[zephyr, footer.scss]`. Output dir is `docs/`.
@@ -86,6 +89,8 @@ This is an **Anthropic-only** workshop for participants: exercises and demos use
 
 The two tool-calling demos (`demo/04-manual-tools`, `demo/04-weather-tool`) run on Claude: tool calling needs no OpenAI-specific feature, and tools should be shown on the provider participants use.
 
+Day 2 is built around **Posit Assistant** (used with Claude, via the workshop Anthropic key or Posit AI's free trial), not `ellmer`/`chatlas`. Day-2 `## Demo` callouts do not point at `demo/` folders; they reference the terminal `pa` agent (deck 08, instructor-only) and the `mcp/` server (deck 07). There are no new `demo/` folders for Day 2.
+
 ### Per-deck illustration mapping
 
 | Deck | Illustration | `data-background-size` |
@@ -94,9 +99,9 @@ The two tool-calling demos (`demo/04-manual-tools`, `demo/04-weather-tool`) run 
 | 02 Programming with LLMs | `undraw_large-language-models_m4no.svg` | `auto 45%` |
 | 03 Prompt engineering and RAG | `undraw_ai-research-assistant_cxx0.svg` | `auto 50%` |
 | 04 Beyond prompts | `undraw_artificial-intelligence_43qa.svg` | `auto 55%` |
-| 05 AI coding assistants | `undraw_coding-assistant_i178.svg` | `auto 40%` |
-| 06 Code completions | `undraw_vibe-coding_mjme.svg` | `auto 50%` |
-| 07 Chat assistance | `undraw_ai-answers_uxgx.svg` | `auto 50%` |
+| 05 Intro to AI coding assistants | `undraw_coding-assistant_i178.svg` | `auto 40%` |
+| 06 Working in your editor | `undraw_vibe-coding_mjme.svg` | `auto 50%` |
+| 07 Steering and extending | `undraw_ai-answers_uxgx.svg` | `auto 50%` |
 | 08 Agentic workflows | `undraw_ai-agent_pdkp.svg` | `auto 45%` |
 
 Position is `82% 85%` everywhere. The size varies because the illustrations have different aspect ratios; within a deck, the title slide and all H1 section dividers use the same values.
