@@ -1,0 +1,198 @@
+---
+title: "Working in your editor"
+subtitle: "Programming with LLMs for Data Practitioners"
+author: "Julia Silge | Posit PBC"
+footer: "<https://juliasilge.github.io/applied-stats-byu-2026/>"
+highlight-style: atom-one
+format:
+  revealjs:
+    theme: [default, custom.scss]
+    transition: fade
+    preview-links: auto
+    width: 1280
+    height: 720
+    template-partials:
+      - title-slide.html
+    title-slide-attributes:
+      data-background-image: "../images/undraw_vibe-coding_mjme.svg"
+      data-background-size: "auto 50%"
+      data-background-position: "82% 85%"
+      data-background-repeat: "no-repeat"
+---
+
+# Hello!
+
+<center>
+
+<img src="https://github.com/juliasilge.png" style="border-radius: 50%;" width="300px"/>
+
+[{{< fa brands github >}} \@juliasilge](https://github.com/juliasilge)
+
+[{{< fa brands bluesky >}} \@juliasilge.com](https://bsky.app/profile/juliasilge.com)
+
+[{{< fa link >}} juliasilge.com](https://juliasilge.com/)
+
+</center>
+
+## Day 2: Build with AI
+
+1.  Intro to AI coding assistants
+2.  Working in your editor (this session!)
+3.  Steering and extending
+4.  Agentic workflows
+
+## Lowest rung, highest mileage
+
+-   Today we live in your editor, with chat, inline completions, and quick fixes
+-   This is the most frequent, lowest-autonomy way to work
+-   You stay in the driver's seat the whole time
+
+# Writing with AI {background-image="../images/undraw_vibe-coding_mjme.svg" background-size="auto 50%" background-position="82% 85%" background-repeat="no-repeat"}
+
+## Completions appear as you type
+
+-   The assistant suggests the next line or block, greyed out, as you type
+-   Accept with <kbd>Tab</kbd>, or keep typing to ignore it
+-   It reads the surrounding code and your session for context
+
+## Steering with comments
+
+-   Write a comment describing what you want, then start the code
+-   For example: 
+    - `# crashes per county, sorted` and begin a dplyr pipeline
+-   Clear names and comments lead to better suggestions
+
+## Accept, edit, reject
+
+-   Read before you accept! A suggestion is not an answer
+-   Accept and then edit to fit, or reject and rephrase
+-   Completions are low-autonomy, so control stays with you
+
+## Habits that go wrong
+
+-   Accepting code you have not read
+-   Letting a suggestion pull you off what you meant to do
+-   Trusting plausible-looking code on data you have not checked
+
+## Two kinds of models
+
+-   Completions fire on **every keystroke**, so they must be fast and cheap
+-   They use small, low-latency models tuned to predict code at your cursor
+-   Chat and agents use **larger, more capable, general purpose** models that are slower and cost more
+-   The trade-off you feel: instant guesses versus slower, thoughtful help
+
+## Not every provider offers completions
+
+-   That small completion model is special, and not every provider ships one
+-   **Anthropic**, the Claude API we have been using, has **no** suitable completion model
+-   So with the workshop Anthropic key you get chat and agents, but **not** inline completions
+-   To experience completions today, you need **Posit AI** (can use the free trial) or GitHub Copilot
+-   Chat and agentic work, where we spend most of today, are the same either way
+
+## Completions
+
+::: {.callout-note icon=false}
+
+## Demo
+
+Follow along if you have Posit AI or Copilot!
+
+In a script with the crash data loaded:
+
+-   Start typing `crashes <- read_` and watch completion finish the path
+-   Write a comment for a small task ("count crashes by city") and let it suggest the code
+-   Accept, edit, reject: notice how it feels to stay in control
+:::
+
+# Explore your data {background-image="../images/undraw_vibe-coding_mjme.svg" background-size="auto 50%" background-position="82% 85%" background-repeat="no-repeat"}
+
+## The assistant already knows your session
+
+-   Yesterday's lesson, now in practice: it can see your data frames, columns, and plots
+-   So describe what you want, and skip pasting the data or the schema
+-   Ask questions in plain language and get back code that runs on your data
+
+## Exploring the crash data
+
+::: {.callout-note icon=false}
+
+## Demo
+
+In chat, ask Posit Assistant:
+
+-   *"Plot the number of crashes by hour of day"*
+-   Run it, look at the result, then ask for one change (labels, color, a different geom)
+:::
+
+## Your turn
+
+::: {.callout-note icon=false}
+
+## Activity
+
+Build a visualization of the crash data with chat or inline completions:
+
+-   Try something like crashes by county, by day of week, or severity by a risk factor (DUI, night, teen driver)
+-   Iterate! Ask for a change like sorting, labels, or a different chart
+-   Notice that it works from the data already in your session
+-   Share what you made with your neighbors
+:::
+
+{{< countdown minutes=15 >}}
+
+# Debug and fix {background-image="../images/undraw_vibe-coding_mjme.svg" background-size="auto 50%" background-position="82% 85%" background-repeat="no-repeat"}
+
+## When something breaks
+
+-   The fastest everyday win is to paste nothing, just ask
+-   Run your code, hit the error, and ask *"what went wrong and how do I fix it?"*
+-   The assistant can see the error, your code, and your session all at once
+
+## Your turn
+
+::: {.callout-note icon=false}
+
+## Activity
+
+Open `16-debug-crashes` and run it from the top:
+
+-   When it errors, do not fix it yourself! Ask Posit Assistant *"what went wrong?"*
+-   Apply the fix, run again, and repeat
+-   There is more than one bug, so keep going until it runs clean
+:::
+
+{{< countdown minutes=15 >}}
+
+## Now you take the wheel
+
+I need a volunteer!
+
+::: {.callout-note icon=false}
+
+## Demo
+
+One of you drives on the big screen:
+
+-   Hit one of the bugs live and work with the assistant to fix it
+-   The rest of us will coach you 
+    - What context does it need?
+    - Do we believe the fix?
+:::
+
+# Thanks!
+
+<center>
+
+<img src="https://github.com/juliasilge.png" style="border-radius: 50%;" width="300px"/>
+
+[{{< fa brands github >}} \@juliasilge](https://github.com/juliasilge)
+
+[{{< fa brands bluesky >}} \@juliasilge.com](https://bsky.app/profile/juliasilge.com)
+
+[{{< fa link >}} juliasilge.com](https://juliasilge.com/)
+
+</center>
+
+::: footer
+Illustrations from [unDraw](https://undraw.co/)
+:::

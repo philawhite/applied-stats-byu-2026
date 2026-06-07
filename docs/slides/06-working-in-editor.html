@@ -7,12 +7,14 @@
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-6d40f8af7092f34acea1908532066003.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/quarto-contrib/countdown-0.5.0/countdown.js"></script>
+<link href="../site_libs/quarto-contrib/countdown-0.5.0/countdown.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.9.38">
 
   <meta name="author" content="Julia Silge | Posit PBC">
-  <title>Programming With LLMs For Data Practitioners – Code completions and inline suggestions</title>
+  <title>Programming With LLMs For Data Practitioners – Working in your editor</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -126,10 +128,10 @@
       margin-right: 0; 
     }
   </style>
-<meta property="og:title" content="Code completions and inline suggestions – Programming With LLMs For Data Practitioners">
+<meta property="og:title" content="Working in your editor – Programming With LLMs For Data Practitioners">
 <meta property="og:description" content="Programming with LLMs for Data Practitioners">
 <meta property="og:site_name" content="Programming With LLMs For Data Practitioners">
-<meta name="twitter:title" content="Code completions and inline suggestions – Programming With LLMs For Data Practitioners">
+<meta name="twitter:title" content="Working in your editor – Programming With LLMs For Data Practitioners">
 <meta name="twitter:description" content="Programming with LLMs for Data Practitioners">
 <meta name="twitter:card" content="summary">
 </head>
@@ -139,31 +141,231 @@
 
 <section id="title-slide" data-background-image="../images/undraw_vibe-coding_mjme.svg" data-background-position="82% 85%" data-background-repeat="no-repeat" data-background-size="auto 50%" class="quarto-title-block center">
   <div class="title-slide-inner">
-    <h1 class="title">Code completions and inline suggestions</h1>
+    <h1 class="title">Working in your editor</h1>
     <p class="subtitle">Programming with LLMs for Data Practitioners</p>
     <p class="author">Julia Silge | Posit PBC</p>
   </div>
 </section>
 <section>
+<section id="hello" class="title-slide slide level1 center">
+<h1>Hello!</h1>
+<center>
+<p><img src="https://github.com/juliasilge.png" style="border-radius: 50%;" width="300px"></p>
+<p><a href="https://github.com/juliasilge"><i class="fa-brands fa-github" aria-label="github"></i> @juliasilge</a></p>
+<p><a href="https://bsky.app/profile/juliasilge.com"><i class="fa-brands fa-bluesky" aria-label="bluesky"></i> @juliasilge.com</a></p>
+<p><a href="https://juliasilge.com/"><i class="fa-solid fa-link" aria-label="link"></i> juliasilge.com</a></p>
+</center>
+</section>
+<section id="day-2-build-with-ai" class="slide level2">
+<h2>Day 2: Build with AI</h2>
+<ol type="1">
+<li>Intro to AI coding assistants</li>
+<li>Working in your editor (this session!)</li>
+<li>Steering and extending</li>
+<li>Agentic workflows</li>
+</ol>
+</section>
+<section id="lowest-rung-highest-mileage" class="slide level2">
+<h2>Lowest rung, highest mileage</h2>
+<ul>
+<li>Today we live in your editor, with chat, inline completions, and quick fixes</li>
+<li>This is the most frequent, lowest-autonomy way to work</li>
+<li>You stay in the driver’s seat the whole time</li>
+</ul>
+</section></section>
+<section>
 <section id="writing-with-ai" class="title-slide slide level1 center" data-background-image="../images/undraw_vibe-coding_mjme.svg" data-background-size="auto 50%" data-background-position="82% 85%" data-background-repeat="no-repeat">
 <h1>Writing with AI</h1>
 
 </section>
-<section id="inline-suggestions-in-practice" class="slide level2">
-<h2>Inline suggestions in practice</h2>
-<p>TODO</p>
+<section id="completions-appear-as-you-type" class="slide level2">
+<h2>Completions appear as you type</h2>
+<ul>
+<li>The assistant suggests the next line or block, greyed out, as you type</li>
+<li>Accept with <kbd>Tab</kbd>, or keep typing to ignore it</li>
+<li>It reads the surrounding code and your session for context</li>
+</ul>
 </section>
-<section id="using-comments-to-steer" class="slide level2">
-<h2>Using comments to steer</h2>
-<p>TODO</p>
+<section id="steering-with-comments" class="slide level2">
+<h2>Steering with comments</h2>
+<ul>
+<li>Write a comment describing what you want, then start the code</li>
+<li>For example:
+<ul>
+<li><code># crashes per county, sorted</code> and begin a dplyr pipeline</li>
+</ul></li>
+<li>Clear names and comments lead to better suggestions</li>
+</ul>
 </section>
-<section id="accepting-editing-rejecting" class="slide level2">
-<h2>Accepting, editing, rejecting</h2>
-<p>TODO</p>
+<section id="accept-edit-reject" class="slide level2">
+<h2>Accept, edit, reject</h2>
+<ul>
+<li>Read before you accept! A suggestion is not an answer</li>
+<li>Accept and then edit to fit, or reject and rephrase</li>
+<li>Completions are low-autonomy, so control stays with you</li>
+</ul>
 </section>
 <section id="habits-that-go-wrong" class="slide level2">
 <h2>Habits that go wrong</h2>
-<p>TODO</p>
+<ul>
+<li>Accepting code you have not read</li>
+<li>Letting a suggestion pull you off what you meant to do</li>
+<li>Trusting plausible-looking code on data you have not checked</li>
+</ul>
+</section>
+<section id="two-kinds-of-models" class="slide level2">
+<h2>Two kinds of models</h2>
+<ul>
+<li>Completions fire on <strong>every keystroke</strong>, so they must be fast and cheap</li>
+<li>They use small, low-latency models tuned to predict code at your cursor</li>
+<li>Chat and agents use <strong>larger, more capable, general purpose</strong> models that are slower and cost more</li>
+<li>The trade-off you feel: instant guesses versus slower, thoughtful help</li>
+</ul>
+</section>
+<section id="not-every-provider-offers-completions" class="slide level2">
+<h2>Not every provider offers completions</h2>
+<ul>
+<li>That small completion model is special, and not every provider ships one</li>
+<li><strong>Anthropic</strong>, the Claude API we have been using, has <strong>no</strong> suitable completion model</li>
+<li>So with the workshop Anthropic key you get chat and agents, but <strong>not</strong> inline completions</li>
+<li>To experience completions today, you need <strong>Posit AI</strong> (can use the free trial) or GitHub Copilot</li>
+<li>Chat and agentic work, where we spend most of today, are the same either way</li>
+</ul>
+</section>
+<section id="completions" class="slide level2">
+<h2>Completions</h2>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Demo</strong></p>
+</div>
+<div class="callout-content">
+<p>Follow along if you have Posit AI or Copilot!</p>
+<p>In a script with the crash data loaded:</p>
+<ul>
+<li>Start typing <code>crashes &lt;- read_</code> and watch completion finish the path</li>
+<li>Write a comment for a small task (“count crashes by city”) and let it suggest the code</li>
+<li>Accept, edit, reject: notice how it feels to stay in control</li>
+</ul>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="explore-your-data" class="title-slide slide level1 center" data-background-image="../images/undraw_vibe-coding_mjme.svg" data-background-size="auto 50%" data-background-position="82% 85%" data-background-repeat="no-repeat">
+<h1>Explore your data</h1>
+
+</section>
+<section id="the-assistant-already-knows-your-session" class="slide level2">
+<h2>The assistant already knows your session</h2>
+<ul>
+<li>Yesterday’s lesson, now in practice: it can see your data frames, columns, and plots</li>
+<li>So describe what you want, and skip pasting the data or the schema</li>
+<li>Ask questions in plain language and get back code that runs on your data</li>
+</ul>
+</section>
+<section id="exploring-the-crash-data" class="slide level2">
+<h2>Exploring the crash data</h2>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Demo</strong></p>
+</div>
+<div class="callout-content">
+<p>In chat, ask Posit Assistant:</p>
+<ul>
+<li><em>“Plot the number of crashes by hour of day”</em></li>
+<li>Run it, look at the result, then ask for one change (labels, color, a different geom)</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="your-turn" class="slide level2">
+<h2>Your turn</h2>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Activity</strong></p>
+</div>
+<div class="callout-content">
+<p>Build a visualization of the crash data with chat or inline completions:</p>
+<ul>
+<li>Try something like crashes by county, by day of week, or severity by a risk factor (DUI, night, teen driver)</li>
+<li>Iterate! Ask for a change like sorting, labels, or a different chart</li>
+<li>Notice that it works from the data already in your session</li>
+<li>Share what you made with your neighbors</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="timer_35282944361f7031ae1b6c76fefbdada32ce7edd" class="countdown" data-warn-when="0" data-update-every="1" data-play-sound="false" data-blink-colon="false" data-start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
+  <div class="countdown-controls">
+    <button class="countdown-bump-down">−</button>
+    <button class="countdown-bump-up">+</button>
+ </div>
+ <code class="countdown-time"><span class="countdown-digits minutes">15</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+ </div>
+</section></section>
+<section>
+<section id="debug-and-fix" class="title-slide slide level1 center" data-background-image="../images/undraw_vibe-coding_mjme.svg" data-background-size="auto 50%" data-background-position="82% 85%" data-background-repeat="no-repeat">
+<h1>Debug and fix</h1>
+
+</section>
+<section id="when-something-breaks" class="slide level2">
+<h2>When something breaks</h2>
+<ul>
+<li>The fastest everyday win is to paste nothing, just ask</li>
+<li>Run your code, hit the error, and ask <em>“what went wrong and how do I fix it?”</em></li>
+<li>The assistant can see the error, your code, and your session all at once</li>
+</ul>
+</section>
+<section id="your-turn-1" class="slide level2">
+<h2>Your turn</h2>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Activity</strong></p>
+</div>
+<div class="callout-content">
+<p>Open <code>16-debug-crashes</code> and run it from the top:</p>
+<ul>
+<li>When it errors, do not fix it yourself! Ask Posit Assistant <em>“what went wrong?”</em></li>
+<li>Apply the fix, run again, and repeat</li>
+<li>There is more than one bug, so keep going until it runs clean</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="timer_35282944361f7031ae1b6c76fefbdada32ce7edd" class="countdown" data-warn-when="0" data-update-every="1" data-play-sound="false" data-blink-colon="false" data-start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
+  <div class="countdown-controls">
+    <button class="countdown-bump-down">−</button>
+    <button class="countdown-bump-up">+</button>
+ </div>
+ <code class="countdown-time"><span class="countdown-digits minutes">15</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+ </div>
+</section>
+<section id="now-you-take-the-wheel" class="slide level2">
+<h2>Now you take the wheel</h2>
+<p>I need a volunteer!</p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Demo</strong></p>
+</div>
+<div class="callout-content">
+<p>One of you drives on the big screen:</p>
+<ul>
+<li>Hit one of the bugs live and work with the assistant to fix it</li>
+<li>The rest of us will coach you
+<ul>
+<li>What context does it need?</li>
+<li>Do we believe the fix?</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
 </section></section>
 <section id="thanks" class="title-slide slide level1 center">
 <h1>Thanks!</h1>

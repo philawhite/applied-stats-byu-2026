@@ -35,32 +35,109 @@
     "text": "Where to go from here\nTODO"
   },
   {
-    "objectID": "slides/06-code-completions.html#inline-suggestions-in-practice",
-    "href": "slides/06-code-completions.html#inline-suggestions-in-practice",
-    "title": "Code completions and inline suggestions",
-    "section": "Inline suggestions in practice",
-    "text": "Inline suggestions in practice\nTODO"
+    "objectID": "slides/06-working-in-editor.html#day-2-build-with-ai",
+    "href": "slides/06-working-in-editor.html#day-2-build-with-ai",
+    "title": "Working in your editor",
+    "section": "Day 2: Build with AI",
+    "text": "Day 2: Build with AI\n\nIntro to AI coding assistants\nWorking in your editor (this session!)\nSteering and extending\nAgentic workflows"
   },
   {
-    "objectID": "slides/06-code-completions.html#using-comments-to-steer",
-    "href": "slides/06-code-completions.html#using-comments-to-steer",
-    "title": "Code completions and inline suggestions",
-    "section": "Using comments to steer",
-    "text": "Using comments to steer\nTODO"
+    "objectID": "slides/06-working-in-editor.html#lowest-rung-highest-mileage",
+    "href": "slides/06-working-in-editor.html#lowest-rung-highest-mileage",
+    "title": "Working in your editor",
+    "section": "Lowest rung, highest mileage",
+    "text": "Lowest rung, highest mileage\n\nToday we live in your editor, with chat, inline completions, and quick fixes\nThis is the most frequent, lowest-autonomy way to work\nYou stay in the driver’s seat the whole time"
   },
   {
-    "objectID": "slides/06-code-completions.html#accepting-editing-rejecting",
-    "href": "slides/06-code-completions.html#accepting-editing-rejecting",
-    "title": "Code completions and inline suggestions",
-    "section": "Accepting, editing, rejecting",
-    "text": "Accepting, editing, rejecting\nTODO"
+    "objectID": "slides/06-working-in-editor.html#completions-appear-as-you-type",
+    "href": "slides/06-working-in-editor.html#completions-appear-as-you-type",
+    "title": "Working in your editor",
+    "section": "Completions appear as you type",
+    "text": "Completions appear as you type\n\nThe assistant suggests the next line or block, greyed out, as you type\nAccept with Tab, or keep typing to ignore it\nIt reads the surrounding code and your session for context"
   },
   {
-    "objectID": "slides/06-code-completions.html#habits-that-go-wrong",
-    "href": "slides/06-code-completions.html#habits-that-go-wrong",
-    "title": "Code completions and inline suggestions",
+    "objectID": "slides/06-working-in-editor.html#steering-with-comments",
+    "href": "slides/06-working-in-editor.html#steering-with-comments",
+    "title": "Working in your editor",
+    "section": "Steering with comments",
+    "text": "Steering with comments\n\nWrite a comment describing what you want, then start the code\nFor example:\n\n# crashes per county, sorted and begin a dplyr pipeline\n\nClear names and comments lead to better suggestions"
+  },
+  {
+    "objectID": "slides/06-working-in-editor.html#accept-edit-reject",
+    "href": "slides/06-working-in-editor.html#accept-edit-reject",
+    "title": "Working in your editor",
+    "section": "Accept, edit, reject",
+    "text": "Accept, edit, reject\n\nRead before you accept! A suggestion is not an answer\nAccept and then edit to fit, or reject and rephrase\nCompletions are low-autonomy, so control stays with you"
+  },
+  {
+    "objectID": "slides/06-working-in-editor.html#habits-that-go-wrong",
+    "href": "slides/06-working-in-editor.html#habits-that-go-wrong",
+    "title": "Working in your editor",
     "section": "Habits that go wrong",
-    "text": "Habits that go wrong\nTODO"
+    "text": "Habits that go wrong\n\nAccepting code you have not read\nLetting a suggestion pull you off what you meant to do\nTrusting plausible-looking code on data you have not checked"
+  },
+  {
+    "objectID": "slides/06-working-in-editor.html#two-kinds-of-models",
+    "href": "slides/06-working-in-editor.html#two-kinds-of-models",
+    "title": "Working in your editor",
+    "section": "Two kinds of models",
+    "text": "Two kinds of models\n\nCompletions fire on every keystroke, so they must be fast and cheap\nThey use small, low-latency models tuned to predict code at your cursor\nChat and agents use larger, more capable, general purpose models that are slower and cost more\nThe trade-off you feel: instant guesses versus slower, thoughtful help"
+  },
+  {
+    "objectID": "slides/06-working-in-editor.html#not-every-provider-offers-completions",
+    "href": "slides/06-working-in-editor.html#not-every-provider-offers-completions",
+    "title": "Working in your editor",
+    "section": "Not every provider offers completions",
+    "text": "Not every provider offers completions\n\nThat small completion model is special, and not every provider ships one\nAnthropic, the Claude API we have been using, has no suitable completion model\nSo with the workshop Anthropic key you get chat and agents, but not inline completions\nTo experience completions today, you need Posit AI (can use the free trial) or GitHub Copilot\nChat and agentic work, where we spend most of today, are the same either way"
+  },
+  {
+    "objectID": "slides/06-working-in-editor.html#completions",
+    "href": "slides/06-working-in-editor.html#completions",
+    "title": "Working in your editor",
+    "section": "Completions",
+    "text": "Completions\n\n\n\nDemo\n\n\nFollow along if you have Posit AI or Copilot!\nIn a script with the crash data loaded:\n\nStart typing crashes &lt;- read_ and watch completion finish the path\nWrite a comment for a small task (“count crashes by city”) and let it suggest the code\nAccept, edit, reject: notice how it feels to stay in control"
+  },
+  {
+    "objectID": "slides/06-working-in-editor.html#the-assistant-already-knows-your-session",
+    "href": "slides/06-working-in-editor.html#the-assistant-already-knows-your-session",
+    "title": "Working in your editor",
+    "section": "The assistant already knows your session",
+    "text": "The assistant already knows your session\n\nYesterday’s lesson, now in practice: it can see your data frames, columns, and plots\nSo describe what you want, and skip pasting the data or the schema\nAsk questions in plain language and get back code that runs on your data"
+  },
+  {
+    "objectID": "slides/06-working-in-editor.html#exploring-the-crash-data",
+    "href": "slides/06-working-in-editor.html#exploring-the-crash-data",
+    "title": "Working in your editor",
+    "section": "Exploring the crash data",
+    "text": "Exploring the crash data\n\n\n\nDemo\n\n\nIn chat, ask Posit Assistant:\n\n“Plot the number of crashes by hour of day”\nRun it, look at the result, then ask for one change (labels, color, a different geom)"
+  },
+  {
+    "objectID": "slides/06-working-in-editor.html#your-turn",
+    "href": "slides/06-working-in-editor.html#your-turn",
+    "title": "Working in your editor",
+    "section": "Your turn",
+    "text": "Your turn\n\n\n\nActivity\n\n\nBuild a visualization of the crash data with chat or inline completions:\n\nTry something like crashes by county, by day of week, or severity by a risk factor (DUI, night, teen driver)\nIterate! Ask for a change like sorting, labels, or a different chart\nNotice that it works from the data already in your session\nShare what you made with your neighbors\n\n\n\n\n\n  \n    −\n    +\n \n 15:00"
+  },
+  {
+    "objectID": "slides/06-working-in-editor.html#when-something-breaks",
+    "href": "slides/06-working-in-editor.html#when-something-breaks",
+    "title": "Working in your editor",
+    "section": "When something breaks",
+    "text": "When something breaks\n\nThe fastest everyday win is to paste nothing, just ask\nRun your code, hit the error, and ask “what went wrong and how do I fix it?”\nThe assistant can see the error, your code, and your session all at once"
+  },
+  {
+    "objectID": "slides/06-working-in-editor.html#your-turn-1",
+    "href": "slides/06-working-in-editor.html#your-turn-1",
+    "title": "Working in your editor",
+    "section": "Your turn",
+    "text": "Your turn\n\n\n\nActivity\n\n\nOpen 16-debug-crashes and run it from the top:\n\nWhen it errors, do not fix it yourself! Ask Posit Assistant “what went wrong?”\nApply the fix, run again, and repeat\nThere is more than one bug, so keep going until it runs clean\n\n\n\n\n\n  \n    −\n    +\n \n 15:00"
+  },
+  {
+    "objectID": "slides/06-working-in-editor.html#now-you-take-the-wheel",
+    "href": "slides/06-working-in-editor.html#now-you-take-the-wheel",
+    "title": "Working in your editor",
+    "section": "Now you take the wheel",
+    "text": "Now you take the wheel\nI need a volunteer!\n\n\n\nDemo\n\n\nOne of you drives on the big screen:\n\nHit one of the bugs live and work with the assistant to fix it\nThe rest of us will coach you\n\nWhat context does it need?\nDo we believe the fix?"
   },
   {
     "objectID": "slides/04-beyond-prompts.html#day-1-build-on-ai",
@@ -256,7 +333,7 @@
     "href": "index.html#schedule",
     "title": "Programming with LLMs for Data Practitioners",
     "section": "Schedule",
-    "text": "Schedule\nCode files for working along are available on GitHub.\n\nTuesday, 17 June 2026: Build on AI\n\n\n\nTime\nActivity\n\n\n\n\n09:00 - 10:10\nTalking with LLMs via code\n\n\n10:10 - 10:30\nBreak\n\n\n10:30 - 11:45\nProgramming with LLMs\n\n\n11:45 - 13:30\nLunch\n\n\n13:30 - 14:40\nPrompt engineering and RAG\n\n\n14:40 - 15:00\nBreak\n\n\n15:00 - 16:15\nBeyond prompts\n\n\n\n\n\nWednesday, 18 June 2026: Build with AI\n\n\n\nTime\nActivity\n\n\n\n\n09:00 - 10:10\nIntro to AI coding assistants\n\n\n10:10 - 10:30\nBreak\n\n\n10:30 - 11:45\nCode completions and inline suggestions\n\n\n11:45 - 13:30\nLunch\n\n\n13:30 - 14:40\nChat-based assistance\n\n\n14:40 - 15:00\nBreak\n\n\n15:00 - 16:15\nAgentic and autonomous workflows"
+    "text": "Schedule\nCode files for working along are available on GitHub.\n\nTuesday, 17 June 2026: Build on AI\n\n\n\nTime\nActivity\n\n\n\n\n09:00 - 10:10\nTalking with LLMs via code\n\n\n10:10 - 10:30\nBreak\n\n\n10:30 - 11:45\nProgramming with LLMs\n\n\n11:45 - 13:30\nLunch\n\n\n13:30 - 14:40\nPrompt engineering and RAG\n\n\n14:40 - 15:00\nBreak\n\n\n15:00 - 16:15\nBeyond prompts\n\n\n\n\n\nWednesday, 18 June 2026: Build with AI\n\n\n\nTime\nActivity\n\n\n\n\n09:00 - 10:10\nIntro to AI coding assistants\n\n\n10:10 - 10:30\nBreak\n\n\n10:30 - 11:45\nWorking in your editor\n\n\n11:45 - 13:30\nLunch\n\n\n13:30 - 14:40\nChat-based assistance\n\n\n14:40 - 15:00\nBreak\n\n\n15:00 - 16:15\nAgentic and autonomous workflows"
   },
   {
     "objectID": "index.html#instructor-bio",

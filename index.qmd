@@ -61,7 +61,7 @@ Code files for working along [are available on GitHub](https://github.com/julias
 | :------------ | :------------------------------------------------------------------------- |
 | 09:00 - 10:10 | [Intro to AI coding assistants](slides/05-ai-coding-assistants.html)       |
 | 10:10 - 10:30 | *Break*                                                             |
-| 10:30 - 11:45 | [Code completions and inline suggestions](slides/06-code-completions.html) |
+| 10:30 - 11:45 | [Working in your editor](slides/06-working-in-editor.html) |
 | 11:45 - 13:30 | *Lunch*                                                              |
 | 13:30 - 14:40 | [Chat-based assistance](slides/07-chat-assistance.html)                    |
 | 14:40 - 15:00 | *Break*                                                             |
