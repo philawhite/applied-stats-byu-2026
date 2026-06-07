@@ -154,7 +154,7 @@ Build a visualization of the crash data with chat or inline completions:
 
 ## Activity
 
-Open `16-debug-crashes` and run it from the top:
+Open `15-debug-crashes` and run it from the top:
 
 -   When it errors, do not fix it yourself! Ask Posit Assistant *"what went wrong?"*
 -   Apply the fix, run again, and repeat

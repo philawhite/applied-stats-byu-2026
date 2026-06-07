@@ -72,6 +72,11 @@ Introduce yourself to your neighbors!
 
 -   How API keys work
 -   Where to put them so the workshop code can find them
+-   Put your Anthropic API key in either `.env` (Python) or `.Renviron` (R) in the working directory:
+
+```env
+ANTHROPIC_API_KEY=your_api_key_here
+```
 
 ## Your turn
 
