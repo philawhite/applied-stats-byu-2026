@@ -1,10 +1,4 @@
 
-/*-- scss:defaults --*/
-
-/*-- Skip zephyr's @import of Inter from fonts.googleapis.com. --*/
-/*-- Fall back to system fonts so quarto preview doesn't hang on network fetches. --*/
-$web-font-path: false;
-
 /*-- scss:rules --*/
 
 .nav-footer-left {

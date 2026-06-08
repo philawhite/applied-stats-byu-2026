@@ -1,6 +1,31 @@
 /*-- scss:defaults --*/
 
+// Echo the website's zephyr Bootswatch theme so the slides feel like part of
+// the same site: zephyr's indigo accent (#3459e6), gray-700 body text
+// (#495057), and the Inter font. Inter is downloaded from Google Fonts (see
+// the @import in the rules block below), matching zephyr's own font import.
+$inter-font-stack: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+$body-color: #495057;
+$main-font: $inter-font-stack;
+$heading-font: $inter-font-stack;
+$heading-color: #212529;
+
+$link-color: #3459e6;
+$link-color-hover: #2541a8;
+
+// Color callout-note boxes (used heavily for "Your turn" activities) with
+// zephyr's indigo instead of Quarto's default blue. This drives both the left
+// border and the header tint.
+$callout-color-note: #3459e6;
+
+$selection-bg: #3459e6;
+$selection-color: #fff;
+
 /*-- scss:rules --*/
+
+// Download Inter from Google Fonts so slides match the website's zephyr font.
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 
 // Title slide layout:
 // - Reveal applies a .center class to title slides (via center: true, the
