@@ -47,7 +47,9 @@ server <- function(input, output, session) {
     ) |>
       paste(
         "\n\nAfter every question, use the 'Update Score' tool to keep track of the user's score.",
-        "Be sure to call the tool after you have graded the user's final answer to the question."
+        "Be sure to call the tool after you have graded the user's final answer to the question.",
+        "Make questions harder if the percent correct is above 66.7% or easier if below 33.3%.",
+        "So, make sure you compute and get the prop_correct score from update_score"
       )
   )
 
@@ -73,14 +75,15 @@ server <- function(input, output, session) {
     scores(the_scores)
 
     correct <- sum(the_scores$answer == the_scores$your_answer)
-    list(correct = correct, incorrect = nrow(the_scores) - correct)
+    list(correct = correct, incorrect = nrow(the_scores) - correct, prop_correct = correct / nrow(the_scores))
   }
 
   client$register_tool(tool(
     update_score,
     description = paste(
       "Add a correct or incorrect answer to the score tally.",
-      "Call this tool after you've graded the user's answer to a question."
+      "Call this tool after you've graded the user's answer to a question.", 
+      "This is also used to compute the proportino correct"
     ),
     arguments = list(
       theme = type_string("The theme of the round."),

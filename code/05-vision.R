@@ -8,7 +8,8 @@ library(ellmer)
 # %% Read in some recipe images
 recipe_images <- here::here("data/recipes/images")
 img_pancakes <- file.path(recipe_images, "EasyBasicPancakes.jpg")
-img_pad_thai <- file.path(recipe_images, "PadThai.jpg")
+img_noodle_flowers <- file.path(recipe_images, "Spaghetti_with_flower.jpg")
+img_cracker_and_drugs <- file.path(recipe_images, "EasyBasicPancakes.jpg")
 
 # %% Pass the image to the chat and ask for a recipe title and description
 chat <- chat_anthropic()
@@ -21,5 +22,6 @@ chat$chat(
 chat <- chat_anthropic()
 chat$chat(
   "Write a recipe to make the food in this image.",
-  content_image_file(img_pad_thai, content_type = "image/webp")
+  content_image_file(img_noodle_flowers, content_type = "image/jpeg")
 )
+

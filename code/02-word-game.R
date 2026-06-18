@@ -16,10 +16,16 @@ chat <- chat_anthropic(
 )
 
 # Ask the first question:
-chat$chat("In British English, guess the word for the person who lives next door.")
+chat$chat("In American English, guess the word for the person who lives next door. Please, if you can, connect it to old english roots and associated germanic words.")
 
 # Ask the second question:
 chat$chat("What helps a car move smoothly down the road?")
+
+chat$chat("Can you speak many languages in this chat or does this need to be in English?")
+
+
+chat$chat("Let's play the word guessing game, now in American English. You ask questions, and I'll respond with yes or no. Let's see how many steps it takes for you to guess.")
+
 
 # %% Compare with...
 chat2 <- chat_anthropic()

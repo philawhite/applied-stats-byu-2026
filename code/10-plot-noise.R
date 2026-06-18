@@ -4,6 +4,8 @@
 # and see what the model says. Then work with a partner to coax the model into
 # giving a "decent" interpretation of pure noise.
 
+rm(list = ls())
+
 # %% Import packages and generate data
 library(ellmer)
 library(ggplot2)

@@ -17,12 +17,11 @@ library(ellmer)
 # **Step 3:** Uncomment the extra lines to include these docs in the prompt and
 # try again.
 
-chat <- chat(
-  "anthropic/claude-3-5-sonnet-20241022",
+chat <- chat_anthropic(
   echo = "output",
   system_prompt = brio::read_file(
     here::here(
-      "_solutions/15_coding-assistant/docs.R.md"
+      "code/12-coding-assistant-docs-rstats.md"
     )
   )
 )
@@ -38,24 +37,29 @@ chat$chat(
   )
 )
 
+
 # Result ----------------------------------------------------------------------
 
 #' Get Weather Forecast for a Location
 #'
-#' Retrieves the weather forecast for a given latitude and longitude using the
-#' National Weather Service API
+#' Returns the weather forecast for a given latitude and longitude using the
+#' National Weather Service API via the weathR package.
 #'
-#' @param lat Numeric latitude value
-#' @param lon Numeric longitude value
-#' @return A dataframe containing forecast data including time and temperature
-#' @export
+#' @param lat Numeric. Latitude of the location.
+#' @param lon Numeric. Longitude of the location.
+#'
+#' @return A data frame containing the weather forecast for the specified location.
 #'
 #' @examples
-#' # Get forecast for New York City (Central Park)
-#' get_forecast(40.768473, -73.976004)
+#' # Get forecast for New York City
+#' get_forecast(lat = 40.7128, lon = -74.0060)
 #'
 #' # Get forecast for Atlanta, GA
-#' get_forecast(33.749045, -84.388792)
+#' get_forecast(lat = 33.7490, lon = -84.3880)
+#'
+#' @export
 get_forecast <- function(lat, lon) {
   weathR::point_forecast(lat = lat, lon = lon)
+  
 }
+
