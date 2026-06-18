@@ -29,12 +29,12 @@ crashes |>
 
 utah_county_subset = crashes |>  filter(COUNTY_NAME == "UTAH")
 
-### Make a ggplot summarizes the number of crashes by hour of the day and crash severity.
-# Color by crash severity. log10 scale
-ggplot(utah_county_subset, aes(x = hour(CRASH_DATETIME), fill = factor(CRASH_SEVERITY_ID))) +
+### Make a ggplot summarizes the number of all crashes by hour of the day and crash severity.
+# Color by crash severity. log10 scale - preserve orginal number of counts in label with the transformations
+ggplot(crashes, aes(x = hour(CRASH_DATETIME), fill = factor(CRASH_SEVERITY_ID))) +
   geom_bar(stat = "count") +
   labs(x = "Hour of Day", y = "Number of Crashes", fill = "Crash Severity") +
   theme_minimal(base_size = 16) + 
-  # scale_y_log10() + 
+  scale_y_continuous(trans = "log10") + 
   scale_fill_viridis_d()
 
