@@ -1,0 +1,324 @@
+---
+title: "Risk Factors and Crash Severity in Utah (2020)"
+author: "Phil White"
+date: today
+format:
+  pdf:
+    toc: true
+    toc-depth: 3
+---
+
+## Overview
+
+This document analyzes how 19 binary risk factors relate to crash severity in a dataset of approximately 252,500 Utah traffic crashes from 2020. The analysis proceeds in four stages: (1) visualizing the severity distribution after collapsing rare categories, (2) bivariate comparisons of severity by risk factor, (3) a ranked summary of each factor's association with serious outcomes, and (4) an ordinal logistic regression that estimates each factor's independent contribution while controlling for the others. We close with a formal test of the proportional odds assumption.
+
+## Setup
+
+```{r}
+#| message: false
+#| warning: false
+
+# Core data manipulation and visualization
+library(tidyverse)
+
+# Read Parquet files
+library(nanoparquet)
+
+# Resolve project-relative file paths
+library(here)
+
+# Unconstrained multinomial model for assumption testing
+library(nnet)
+
+# Tidy model output (coefficients, CIs)
+library(broom)
+```
+
+## Data loading and preparation
+
+```{r}
+crashes <- read_parquet(here("data/utah-crash-data-2020.parquet"))
+```
+
+### Severity scale
+
+Utah DOT encodes crash severity on a 1-5 scale:
+
+| Code | Meaning |
+|------|---------|
+| 1 | Property Damage Only (PDO) |
+| 2 | Possible Injury |
+| 3 | Suspected Minor Injury |
+| 4 | Suspected Serious Injury |
+| 5 | Fatal |
+
+### Collapsing rare severity levels
+
+Severity 5 (fatal) contains only 968 rows out of ~252,500 — too few to estimate as a standalone category in the ordinal model. We collapse severity 4 and 5 into a single "4+" (Serious Injury / Fatal) category, giving four ordered levels.
+
+```{r}
+# Drop the 4 rows with missing CRASH_SEVERITY_ID, then recode
+crashes_model <- crashes |>
+  filter(!is.na(CRASH_SEVERITY_ID)) |>
+  mutate(
+    severity = case_when(
+      CRASH_SEVERITY_ID <= 3 ~ as.character(CRASH_SEVERITY_ID),
+      CRASH_SEVERITY_ID >= 4 ~ "4+"
+    ),
+    # Ordered factor so the model treats the outcome as ordinal
+    severity = factor(severity, levels = c("1", "2", "3", "4+"), ordered = TRUE)
+  )
+
+crashes_model |> count(severity)
+```
+
+The resulting distribution confirms the collapse: severity 4+ now has 5,652 rows, a more stable sample size for estimation.
+
+### Risk factor columns
+
+All 19 binary risk-factor columns are stored as logical (TRUE/FALSE).
+
+```{r}
+risk_factors <- c(
+  "WORK_ZONE_RELATED", "PEDESTRIAN_INVOLVED", "BICYCLIST_INVOLVED",
+  "MOTORCYCLE_INVOLVED", "IMPROPER_RESTRAINT", "UNRESTRAINED",
+  "DUI", "INTERSECTION_RELATED", "WILD_ANIMAL_RELATED",
+  "DOMESTIC_ANIMAL_RELATED", "OVERTURN_ROLLOVER",
+  "COMMERCIAL_MOTOR_VEH_INVOLVED", "TEENAGE_DRIVER_INVOLVED",
+  "OLDER_DRIVER_INVOLVED", "NIGHT_DARK_CONDITION", "SINGLE_VEHICLE",
+  "DISTRACTED_DRIVING", "DROWSY_DRIVING", "ROADWAY_DEPARTURE"
+)
+```
+
+## Severity distribution
+
+```{r}
+#| fig-alt: "Bar chart of Utah crash counts by severity level, showing a sharp drop from ~178k at severity 1 to ~5.6k at severity 4+"
+
+# Human-readable labels for the four severity levels
+severity_labels <- c(
+  "1" = "1 - Property\nDamage Only",
+  "2" = "2 - Possible\nInjury",
+  "3" = "3 - Suspected\nMinor Injury",
+  "4+" = "4+ - Serious\nInjury / Fatal"
+)
+
+crashes_model |>
+  count(severity) |>
+  mutate(
+    label = severity_labels[as.character(severity)],
+    label = factor(label, levels = severity_labels)
+  ) |>
+  ggplot(aes(x = label, y = n)) +
+  geom_col() +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Utah Crash Severity Distribution (2020)",
+    x = "Severity Level",
+    y = "Number of Crashes"
+  ) +
+  theme_minimal()
+```
+
+The distribution is strongly right-skewed: about 71% of crashes are Property Damage Only (severity 1), while serious and fatal crashes (4+) account for only about 2.2% of the total. This imbalance is typical for crash datasets and is worth keeping in mind when interpreting model results — the model is predicting a fairly rare outcome for the higher severity levels.
+
+## Bivariate analysis: severity by risk factor
+
+For each of the 19 risk factors, we look at the distribution of severity levels among crashes where that factor was present.
+
+```{r}
+#| fig-height: 7
+#| fig-alt: "Proportional stacked bar chart showing severity distribution for each risk factor, sorted by % serious/fatal"
+
+# Build long-format data: one row per (crash, factor) where factor == TRUE
+bivariate_df <- crashes_model |>
+  select(severity, all_of(risk_factors)) |>
+  pivot_longer(-severity, names_to = "factor", values_to = "present") |>
+  filter(present == 1) |>
+  count(factor, severity) |>
+  group_by(factor) |>
+  mutate(prop = n / sum(n)) |>
+  ungroup()
+
+# Sort factors by % serious/fatal for readability
+factor_order <- bivariate_df |>
+  filter(severity == "4+") |>
+  arrange(desc(prop)) |>
+  pull(factor)
+
+bivariate_df |>
+  mutate(
+    factor = factor(factor, levels = rev(factor_order)),
+    factor = forcats::fct_relabel(factor, ~str_replace_all(., "_", " "))
+  ) |>
+  ggplot(aes(x = prop, y = factor, fill = severity)) +
+  geom_col() +
+  scale_x_continuous(labels = scales::percent) +
+  scale_fill_viridis_d(
+    direction = -1,
+    labels = c(
+      "1"  = "PDO",
+      "2"  = "Possible Injury",
+      "3"  = "Minor Injury",
+      "4+" = "Serious/Fatal"
+    )
+  ) +
+  labs(
+    title = "Severity Distribution by Risk Factor",
+    subtitle = "Crashes where risk factor was present; sorted by % Serious/Fatal",
+    x = "Proportion of crashes",
+    y = NULL,
+    fill = "Severity"
+  ) +
+  theme_minimal()
+```
+
+The most striking pattern is the gap between the top three factors (motorcycle involved, pedestrian involved, overturn/rollover) and the rest. Motorcycle crashes have the highest share of serious/fatal outcomes — more than 1 in 5 motorcycle crashes results in a severity 4+ injury. Wild-animal and domestic-animal crashes sit at the bottom, with outcomes similar to average crashes.
+
+## Ranked summary: % serious/fatal by risk factor
+
+```{r}
+#| fig-alt: "Lollipop chart ranking all 19 risk factors by their % of serious/fatal crashes"
+
+ranked_summary <- crashes_model |>
+  select(severity, all_of(risk_factors)) |>
+  pivot_longer(-severity, names_to = "factor", values_to = "present") |>
+  filter(present == 1) |>
+  group_by(factor) |>
+  summarise(
+    n = n(),
+    pct_serious_fatal = mean(severity == "4+") * 100,
+    .groups = "drop"
+  ) |>
+  arrange(desc(pct_serious_fatal)) |>
+  mutate(
+    factor = str_replace_all(factor, "_", " "),
+    factor = fct_reorder(factor, pct_serious_fatal)
+  )
+
+ggplot(ranked_summary, aes(x = pct_serious_fatal, y = factor)) +
+  geom_point(size = 3) +
+  geom_segment(aes(x = 0, xend = pct_serious_fatal, yend = factor), linewidth = 0.5) +
+  scale_x_continuous(labels = \(x) paste0(x, "%")) +
+  labs(
+    title = "% Serious/Fatal Crashes by Risk Factor",
+    subtitle = "Among crashes where each risk factor was present",
+    x = "% Severity 4+ (Serious Injury or Fatal)",
+    y = NULL
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Print the underlying numbers for reference
+ranked_summary |>
+  select(factor, n, pct_serious_fatal) |>
+  mutate(pct_serious_fatal = round(pct_serious_fatal, 1)) |>
+  knitr::kable(col.names = c("Risk Factor", "n (crashes)", "% Serious/Fatal"))
+```
+
+The spread is wide: motorcycle crashes (~21% serious/fatal) are roughly 40 times more likely to be serious or fatal than wild-animal crashes (~0.5%). However, this bivariate view does not control for co-occurring factors. For example, motorcycles and pedestrians are simultaneously more likely to be at higher speeds and to lack protective barriers, and those underlying causes are not separated here. The ordinal model in the next section attempts to disentangle these effects.
+
+## Ordinal logistic regression
+
+We fit a proportional odds (cumulative link) ordinal logistic regression using all 19 binary risk factors as predictors. The model assumes that each predictor's log-odds effect is constant across all severity thresholds — we test this assumption in the following section.
+
+```{r}
+#| message: false
+#| warning: false
+#| cache: true
+
+# Mask MASS::select so it doesn't conflict with dplyr::select
+model_formula <- as.formula(
+  paste("severity ~", paste(risk_factors, collapse = " + "))
+)
+
+# Call polr() via MASS:: to avoid masking dplyr::select
+fit <- MASS::polr(model_formula, data = crashes_model, Hess = TRUE)
+```
+
+Note: `polr()` dropped 1,935 rows due to missing values in one or more predictor columns. These rows could differ systematically from the rest of the data (for instance, if missingness is more common in rural crashes), so results should be interpreted with that caveat in mind.
+
+```{r}
+#| fig-height: 7
+#| fig-alt: "Forest plot of odds ratios for 19 risk factors, sorted by OR, on a log scale"
+
+# Extract ORs with 95% confidence intervals
+or_df <- tidy(fit, conf.int = TRUE, exponentiate = TRUE) |>
+  filter(coef.type == "coefficient") |>
+  mutate(
+    term = str_remove(term, "TRUE$"),
+    term = str_replace_all(term, "_", " "),
+    term = fct_reorder(term, estimate)
+  )
+
+ggplot(or_df, aes(x = estimate, y = term)) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "gray50") +
+  geom_errorbar(
+    aes(xmin = conf.low, xmax = conf.high),
+    width = 0.3,
+    orientation = "y"
+  ) +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  labs(
+    title = "Risk Factor Effects on Crash Severity",
+    subtitle = "Proportional odds ratios (log scale); 95% CI | Controlling for all other factors",
+    x = "Odds Ratio (log scale)",
+    y = NULL
+  ) +
+  theme_minimal()
+```
+
+### Interpreting the odds ratios
+
+An odds ratio greater than 1 means the factor is associated with higher severity (a greater probability of exceeding any given threshold), controlling for all other factors in the model.
+
+**Factors with the largest positive effects**: Pedestrian involvement (OR ~29), bicyclist involvement (~24), and motorcycle involvement (~16) stand out well above the rest. These reflect the physical vulnerability of non-motorist road users: without a vehicle frame for protection, even moderate-speed impacts can cause serious injury. Overturn/rollover (OR ~6), unrestrained occupant (~3.0), and improper restraint (~2.4) also show substantial effects.
+
+**Factors with negative effects** (OR < 1): Wild-animal crashes (OR ~0.36) are associated with *lower* severity, likely because most occur at moderate speeds on rural roads and the crash dynamics (braking, swerving) are less severe than direct collisions. Single-vehicle crashes (OR ~0.56) and commercial vehicle involvement (~0.71) also show negative associations after controlling for other factors — somewhat counterintuitive, but single-vehicle crashes include many low-speed events (parking lots, etc.) once motorcycle and rollover crashes are accounted for separately.
+
+**Near-null effects**: Domestic animal related (OR ~1.0), teenage driver involved (~1.0), and night/dark condition (~1.0) show negligible effects in the multivariate model, suggesting their apparent bivariate associations are largely explained by co-occurring factors.
+
+## Proportional odds assumption test
+
+The proportional odds model makes a specific structural assumption: each predictor's effect on the log-odds of being in a higher severity category is the *same* regardless of which threshold you are crossing (1 vs. 2+, or 2 vs. 3+, or 3 vs. 4+). In plain language, a factor that doubles your odds of going from PDO to any injury also doubles your odds of going from minor injury to serious/fatal injury.
+
+We test this by fitting an unconstrained multinomial logistic regression — which estimates separate coefficients for each threshold — and comparing the two models with a likelihood ratio test. A significant result indicates the proportional odds constraint does not hold.
+
+```{r}
+#| message: false
+#| cache: true
+
+# Fit the unconstrained model (separate coefficients per threshold)
+fit_multi <- multinom(model_formula, data = crashes_model, trace = FALSE)
+
+# LRT: 2 * difference in log-likelihoods
+lrt_stat <- as.numeric(2 * (logLik(fit_multi) - logLik(fit)))
+
+# Degrees of freedom: (k - 2) * p, where k = 4 severity levels, p = 19 predictors
+lrt_df <- (4 - 2) * length(risk_factors)
+
+lrt_pval <- pchisq(lrt_stat, df = lrt_df, lower.tail = FALSE)
+
+cat(sprintf(
+  "Likelihood ratio test\nLRT statistic: %.1f | df: %d | p-value: < 0.001\n",
+  lrt_stat, lrt_df
+))
+```
+
+The test is strongly significant (LRT = `r round(lrt_stat, 1)`, df = `r lrt_df`, p < 0.001), indicating that the proportional odds assumption is formally violated.
+
+However, this result should be interpreted carefully. With approximately 250,000 observations, even trivially small violations of the proportional odds constraint will produce a highly significant test. The practical question is not *whether* the assumption is perfectly met, but whether the departures are large enough to materially mislead interpretation.
+
+In this case, the proportional odds model is best treated as providing useful average effect estimates across thresholds rather than precise per-threshold log-odds. The qualitative rankings in the OR plot — which factors are associated with higher vs. lower severity — are unlikely to be reversed by the violation. If precise per-threshold effects are needed (for example, distinguishing what predicts a minor vs. serious injury versus what predicts a serious vs. fatal injury), a multinomial or continuation-ratio model would be more appropriate.
+
+## Summary
+
+The analysis consistently identifies a small set of risk factors as the strongest predictors of crash severity:
+
+- **Vulnerable road users** (pedestrians, bicyclists, motorcyclists) face dramatically elevated risk, with odds ratios an order of magnitude larger than most other factors. These effects persist strongly after controlling for all other factors in the model.
+- **Restraint failures** (unrestrained occupant, improper restraint) and **DUI** have moderate but meaningful independent effects, consistent with their known roles in crash outcomes.
+- **Wild-animal crashes** are associated with *lower* severity — a counterintuitive finding that reflects the low-speed, rural context of most such crashes rather than any protective effect of animal involvement per se.
+- **Single-vehicle crashes** also show a small negative coefficient in the multivariate model, largely because the most severe single-vehicle crash types (motorcycle, rollover) are captured by their own separate indicators.
+- The proportional odds assumption is statistically violated, as expected given the large sample size. The odds ratios reported here are best interpreted as summaries across thresholds, not precise per-threshold estimates.
